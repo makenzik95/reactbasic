@@ -22,7 +22,7 @@ jobs:
           git config user.email "<>"
       
       - name: Dependecies
-        run: npm install 
+        run: npm install --save react react-dom react-scripts
              npm ci
       
       - name: Build
