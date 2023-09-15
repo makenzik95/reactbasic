@@ -12,32 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14
-      
-      - name: setup git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-      
-      - name: Dependecies
-        run: npm install --save react react-dom react-scripts
-             npm i web-vitals --save-dev
-             npm ci
-      
-      - name: Build
-        run: npm run build
-        
-      - name: Save version
-        id: version
-        run: echo ::set-output name=tag::$(echo $(node -p -e "require('./package.json').version"))
         
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
         
       - name: Build Docker image
-        run: docker build . --file Dockerfile --platform linux/amd64 --tag makenzik95/firstreact-app:${{steps.version.outputs.tag}}
+        run: docker build . --file Dockerfile --platform linux/amd64 -t makenzik95/firstreact-app:${GITHUB_SHA::6}
         
       - name: Push to Docker Hub
-        run: docker push makenzik95/firstreact-app:${{steps.version.outputs.tag}}
+        run: docker push makenzik95/firstreact-app:${GITHUB_SHA::6}
+
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ec2-54-90-142-56.compute-1.amazonaws.com
+          username: ec2-user
+          key: ${{ secrets.SSH_KEY }} 
+          script: |
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps -a -q)
+            docker run -d -p 80:8080 makenzik95/firstreact-app:${GITHUB_SHA::6}
+            docker ps
