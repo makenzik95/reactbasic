@@ -23,6 +23,7 @@ jobs:
       
       - name: Dependecies
         run: npm install --save react react-dom react-scripts
+             npm i web-vitals --save-dev
              npm ci
       
       - name: Build
