@@ -34,9 +34,7 @@ jobs:
         run: echo ::set-output name=tag::$(echo $(node -p -e "require('./package.json').version"))
         
       - name: Increase version
-        run: git stash 
-             npm version patch 
-             git stash pop
+        run: npm version patch 
         
       - name: Push new version
         run: git push
