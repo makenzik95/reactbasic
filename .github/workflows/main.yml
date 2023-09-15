@@ -24,6 +24,8 @@ jobs:
 
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          COMMIT_SHA: ${GITHUB_SHA::6}
         with:
           host: ec2-54-90-142-56.compute-1.amazonaws.com
           username: ec2-user
@@ -31,5 +33,5 @@ jobs:
           script: |
             docker stop maria_first_react
             docker rm maria_first_react
-            docker run -d -p 80:8080 --name maria_first_react makenzik95/firstreact-app:${GITHUB_SHA::6}
+            docker run -d -p 80:8080 --name maria_first_react makenzik95/firstreact-app:${{ env.COMMIT_SHA }}
             docker ps
