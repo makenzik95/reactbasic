@@ -22,16 +22,14 @@ jobs:
       - name: Push to Docker Hub
         run: docker push makenzik95/firstreact-app:0.1.0
 
-      - name: executing remote ssh commands using ssh key
+      - name: multiple command
         uses: appleboy/ssh-action@v1.0.0
         env:
-          COMMIT_SHA: ${GITHUB_SHA::6}
+          IMAGETAG: ${{ github.sha }}
         with:
           host: ec2-54-90-142-56.compute-1.amazonaws.com
           username: ec2-user
           key: ${{ secrets.SSH_KEY }} 
+          envs: IMAGETAG
           script: |
-            docker stop maria_first_react
-            docker rm maria_first_react
-            docker run -d -p 80:8080 --name maria_first_react makenzik95/firstreact-app:0.1.0
-            docker ps
+             docker run -d -p 80:80 --name maria_first_react makenzik95/firstreact-app:${IMAGETAG::6}
