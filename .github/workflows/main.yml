@@ -20,7 +20,7 @@ jobs:
         run: docker build . --file Dockerfile --platform linux/amd64 -t makenzik95/firstreact-app:0.1.0
         
       - name: Push to Docker Hub
-        run: docker push makenzik95/firstreact-app:0.1.0
+        run: docker push makenzik95/firstreact-app:${IMAGETAG::6}
 
       - name: multiple command
         uses: appleboy/ssh-action@v1.0.0
