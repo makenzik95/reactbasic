@@ -20,10 +20,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
         
       - name: Build Docker image
-        run: docker build . --file Dockerfile --platform linux/amd64 -t makenzik95/firstreact-app:${{ github.sha::6 }}
+        run: docker build . --file Dockerfile --platform linux/amd64 -t makenzik95/firstreact-app:${{ github.sha }}
         
       - name: Push to Docker Hub
-        run: docker push makenzik95/firstreact-app:${{ github.sha::6 }}
+        run: docker push makenzik95/firstreact-app:${{ github.sha }}
 
       - name: multiple command
         uses: appleboy/ssh-action@v1.0.0
@@ -37,5 +37,5 @@ jobs:
           script: |
              docker stop maria_first_react
              docker rm maria_first_react
-             docker run -d -p 80:80 --name maria_first_react makenzik95/firstreact-app:${IMAGETAG::6}
+             docker run -d -p 80:80 --name maria_first_react makenzik95/firstreact-app:${IMAGETAG}
              docker ps
