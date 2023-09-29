@@ -35,4 +35,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }} 
           envs: IMAGETAG
           script: |
-             docker run -d -p 80:80 makenzik95/firstreact-app:${{ github.sha }}
+             docker stop maria_first_react
+             docker rm maria_first_react
+             docker run -d -p 80:80 --name maria_first_react makenzik95/firstreact-app:${IMAGETAG::6}
+             docker ps
