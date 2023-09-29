@@ -35,4 +35,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }} 
           envs: IMAGETAG
           script: |
-             docker run -d -p 80:80 makenzik95/firstreact-app:${IMAGETAG::6}
+             docker run -d -p 80:80 makenzik95/firstreact-app:${{ github.sha }}
